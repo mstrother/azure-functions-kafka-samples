@@ -48,7 +48,7 @@ stages:
   dependsOn: Build
   condition: succeeded()
   jobs:
-  - job: Deploy
+  - job: DeployFunction
     displayName: Deploy
     pool:
       vmImage: $(vmImageName)
