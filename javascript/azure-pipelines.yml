@@ -3,62 +3,34 @@ trigger:
 
 variables:
   azureSubscription: 'ac03a077-353c-4da7-9874-d5d115420f55'
-  functionAppName: 'kafka-javascript'
-  vmImageName: 'ubuntu-latest'  
+  functionAppName: 'kafka-dotnet'
 
-stages:
-- stage: Build
-  displayName: Build stage
-  jobs:
-  - job: Build
-    displayName: Build
-    pool:
-      vmImage: $(vmImageName)
+pool:
+  vmImage: 'ubuntu-latest'
 
-    steps:
-    - task: NodeTool@0
-      inputs:
-        versionSpec: '14.x'
-      displayName: 'Install Node.js'
+steps:
+- script: |
+    cd javascript
+    npm install
+    npm run build --if-present
+    npm run test --if-present
 
-    - script: |
-        ls -l
-        cd javascript
-        npm install
-        npm run build --if-present
-        npm run test --if-present
-      displayName: 'Prepare binaries'
+- task: ArchiveFiles@2
+  displayName: 'Archive files'
+  inputs:
+    rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+    includeRootFolder: false
+    archiveFile: $(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip
+    replaceExistingArchive: true
 
-    - task: ArchiveFiles@2
-      displayName: 'Archive files'
-      inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
-        includeRootFolder: false
-        archiveType: zip
-        archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-        replaceExistingArchive: true
+- upload: '$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip'
+  artifact: drop
 
-    - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-      artifact: drop
-
-- stage: Deploy
-  displayName: Deploy stage
-  dependsOn: Build
-  condition: succeeded()
-  jobs:
-  - deployment: Deploy
-    displayName: Deploy
-    pool:
-      vmImage: $(vmImageName)
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - task: AzureFunctionApp@1
-            displayName: 'Azure Functions App Deploy: kafka-javascript'
-            inputs:
-              azureSubscription: '$(azureSubscription)'
-              appType: functionAppLinux
-              appName: $(functionAppName)
-              package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
-              deploymentMethod: runFromPackage
+- task: AzureFunctionApp@1
+  displayName: 'Azure Functions App Deploy: kafka-javascript'
+  inputs:
+    azureSubscription: '$(azureSubscription)'
+    appType: functionAppLinux
+    appName: $(functionAppName)
+    package: '$(Pipeline.Workspace)/drop/build$(Build.BuildId).zip'
+    deploymentMethod: runFromPackage
