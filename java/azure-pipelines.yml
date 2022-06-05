@@ -1,0 +1,35 @@
+trigger:
+- main
+
+variables:
+  azureSubscription: 'ac03a077-353c-4da7-9874-d5d115420f55'
+  functionAppName: 'kafka-dotnet'
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'java/pom.xml'
+    goals: package
+
+- task: ArchiveFiles@2
+  displayName: 'Archive files'
+  inputs:
+    rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+    includeRootFolder: false
+    archiveFile: $(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip
+    replaceExistingArchive: true
+
+- upload: '$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip'
+  artifact: drop
+
+- task: AzureFunctionApp@1
+  displayName: 'Azure Functions App Deploy: kafka-javascript'
+  inputs:
+    azureSubscription: '$(azureSubscription)'
+    appType: functionAppLinux
+    appName: $(functionAppName)
+    package: '$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip'
+    deploymentMethod: runFromPackage
