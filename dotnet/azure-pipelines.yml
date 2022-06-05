@@ -13,7 +13,7 @@ steps:
     cd dotnet
     dotnet restore
     dotnet build --configuration Release
-    dotnet publish --configuration Release --output publish_output
+    dotnet publish --configuration Release --output $(System.DefaultWorkingDirectory)/publish_output
     ls -l
     cd ..
     ls -l
