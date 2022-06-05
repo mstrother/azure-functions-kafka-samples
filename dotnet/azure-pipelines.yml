@@ -8,7 +8,7 @@ variables:
 
 stages:
 - stage: Build
-  displayName: Build stage
+  displayName: Build
   jobs:
   - job: Build
     displayName: Build
@@ -44,24 +44,21 @@ stages:
       artifact: drop
 
 - stage: Deploy
-  displayName: Deploy stage
+  displayName: Deploy
   dependsOn: Build
   condition: succeeded()
   jobs:
-  - deployment: Deploy
+  - job: Deploy
     displayName: Deploy
-    environment: $(environmentName)
     pool:
       vmImage: $(vmImageName)
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - task: AzureFunctionApp@1
-            displayName: 'Azure Functions App Deploy: kafka-javascript'
-            inputs:
-              azureSubscription: '$(azureSubscription)'
-              appType: functionAppLinux
-              appName: $(functionAppName)
-              package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
-              deploymentMethod: runFromPackage
+          
+    steps:
+    - task: AzureFunctionApp@1
+      displayName: 'Azure Functions App Deploy: kafka-javascript'
+      inputs:
+        azureSubscription: '$(azureSubscription)'
+        appType: functionAppLinux
+        appName: $(functionAppName)
+        package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
+         deploymentMethod: runFromPackage
