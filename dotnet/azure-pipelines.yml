@@ -13,11 +13,11 @@ steps:
     cd dotnet
     dotnet restore
     dotnet build --configuration Release
-    dotnet publish --configuration Release --output $(System.DefaultWorkingDirectory)/publish_output
+    dotnet publish --configuration Release --output $(System.DefaultWorkingDirectory)/dotnet/publish_output
 
 - task: ArchiveFiles@2
   inputs:
-    rootFolderOrFile: '$(System.DefaultWorkingDirectory)/publish_output'
+    rootFolderOrFile: '$(System.DefaultWorkingDirectory)/dotnet/publish_output'
     includeRootFolder: false
     archiveFile: $(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip
     replaceExistingArchive: true
