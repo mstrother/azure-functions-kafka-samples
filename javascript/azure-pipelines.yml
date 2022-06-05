@@ -3,7 +3,7 @@ trigger:
 
 variables:
   azureSubscription: 'ac03a077-353c-4da7-9874-d5d115420f55'
-  functionAppName: 'kafka-dotnet'
+  functionAppName: 'kafka-javascript'
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -16,7 +16,6 @@ steps:
     npm run test --if-present
 
 - task: ArchiveFiles@2
-  displayName: 'Archive files'
   inputs:
     rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
     includeRootFolder: false
@@ -27,7 +26,6 @@ steps:
   artifact: drop
 
 - task: AzureFunctionApp@1
-  displayName: 'Azure Functions App Deploy: kafka-javascript'
   inputs:
     azureSubscription: '$(azureSubscription)'
     appType: functionAppLinux
