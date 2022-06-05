@@ -13,6 +13,9 @@ steps:
     cd dotnet
     dotnet restore
     dotnet build --configuration Release
+    ls -l
+    cd ..
+    ls -l
 
 - task: DotNetCoreCLI@2
   inputs:
