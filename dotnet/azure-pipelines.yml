@@ -15,6 +15,7 @@ stages:
     pool:
       vmImage: $(vmImageName)
 
+    steps:
     - script: |
         cd dotnet
         dotnet restore
