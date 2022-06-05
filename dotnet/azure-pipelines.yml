@@ -35,5 +35,5 @@ steps:
     azureSubscription: '$(azureSubscription)'
     appType: functionAppLinux
     appName: $(functionAppName)
-    package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
+    package: $(System.ArtifactsDirectory)/**/*.zip
     deploymentMethod: runFromPackage
