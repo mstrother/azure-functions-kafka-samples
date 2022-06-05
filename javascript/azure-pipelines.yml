@@ -5,7 +5,6 @@ variables:
   azureSubscription: 'ac03a077-353c-4da7-9874-d5d115420f55'
   functionAppName: 'kafka-javascript'
   vmImageName: 'ubuntu-latest'  
-  environmentName: 'kafka-javascript'
 
 stages:
 - stage: Build
@@ -49,7 +48,6 @@ stages:
   jobs:
   - deployment: Deploy
     displayName: Deploy
-    environment: $(environmentName)
     pool:
       vmImage: $(vmImageName)
     strategy:
