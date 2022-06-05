@@ -10,7 +10,6 @@ pool:
 
 steps:
 - script: |
-  displayName: 'Prepare binaries'  
     cd dotnet
     dotnet restore
     dotnet build --configuration Release
