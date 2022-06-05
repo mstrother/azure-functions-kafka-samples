@@ -4,9 +4,8 @@ trigger:
 variables:
   azureSubscription: 'ac03a077-353c-4da7-9874-d5d115420f55'
   functionAppName: 'kafka-javascript'
-
-  # Agent VM image name
-  vmImageName: 'ubuntu-latest'
+  vmImageName: 'ubuntu-latest'  
+  environmentName: 'kafka-javascript'
 
 stages:
 - stage: Build
