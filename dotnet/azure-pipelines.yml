@@ -6,7 +6,7 @@ variables:
   functionAppName: 'kafka-dotnet'
 
 pool:
-  vmImageName: 'ubuntu-latest'
+  vmImage: 'ubuntu-latest'
 
 steps:
 - script: |
