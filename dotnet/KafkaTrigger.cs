@@ -9,10 +9,10 @@ namespace Confluent
     {
         [FunctionName("KafkaTrigger")]
         public static void Run(
-            [KafkaTrigger("pkc-4rn2p.canadacentral.azure.confluent.cloud:9092",
+            [KafkaTrigger("%BrokerList%",
                           "poc",
-                          Username = "WOV76HBEX3YUNPHV",
-                          Password = "oPbYPd5xVQjGx7eUQ1ovZ+dRsv0lJ0z24eNqAHjEGHlrk4SKxEyjrjKnch4EAdVt",
+                          Username = "%ConfluentCloudUserName%",
+                          Password = "%ConfluentCloudPassword%",
                           Protocol = BrokerProtocol.SaslSsl,
                           AuthenticationMode = BrokerAuthenticationMode.Plain,
                           ConsumerGroup = "$Default")] KafkaEventData<string> kevent, ILogger log)

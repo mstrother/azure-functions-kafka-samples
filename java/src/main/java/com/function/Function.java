@@ -17,10 +17,10 @@ public class Function {
             @KafkaTrigger(
                 name = "KafkaTrigger",
                 topic = "poc",  
-                brokerList="pkc-4rn2p.canadacentral.azure.confluent.cloud:9092",
+                brokerList="%BrokerList%",
                 consumerGroup="$Default", 
-                username = "WOV76HBEX3YUNPHV", 
-                password = "oPbYPd5xVQjGx7eUQ1ovZ+dRsv0lJ0z24eNqAHjEGHlrk4SKxEyjrjKnch4EAdVt",
+                username = "%ConfluentCloudUsername%", 
+                password = "%ConfluentCloudPassword%",
                 authenticationMode = BrokerAuthenticationMode.PLAIN,
                 protocol = BrokerProtocol.SASLSSL,
                 dataType = "string"
